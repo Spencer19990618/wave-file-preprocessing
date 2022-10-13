@@ -42,7 +42,8 @@ def get_3dim_spectrum(wav_name, channel_vec, start_point, stop_point, frame, shi
     number_of_frame = np.int((len(samples) - frame) /  shift)
     spectrums = np.zeros((len(channel_vec), number_of_frame, np.int(fftl / 2) + 1), dtype=np.complex64)
     for ii in range(0, number_of_frame):
-        multi_signal_spectrum = fft(dump_wav[:, st:ed], n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
+        # multi_signal_spectrum = fft(dump_wav[:, st:ed], n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
+        multi_signal_spectrum = fft(dump_wav[:, st:ed]*multi_window, n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
         spectrums[:, ii, :] = multi_signal_spectrum
         st = st + shift
         ed = ed + shift
@@ -51,6 +52,8 @@ def get_3dim_spectrum(wav_name, channel_vec, start_point, stop_point, frame, shi
 def get_3dim_spectrum_from_data(wav_data, frame, shift, fftl):
     """
     dump_wav : channel_size * speech_size (2dim)
+    FFT_LENGTH = 512
+    FFT_SHIFT = 256
     """
     len_sample, len_channel_vec = np.shape(wav_data)            
     dump_wav = wav_data.T
