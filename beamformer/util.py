@@ -65,7 +65,8 @@ def get_3dim_spectrum_from_data(wav_data, frame, shift, fftl):
     number_of_frame = np.int((len_sample - frame) /  shift)    
     spectrums = np.zeros((len_channel_vec, number_of_frame, np.int(fftl / 2) + 1), dtype=np.complex64)
     for ii in range(0, number_of_frame):       
-        multi_signal_spectrum = fft(dump_wav[:, st:ed], n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
+        # multi_signal_spectrum = fft(dump_wav[:, st:ed], n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
+        multi_signal_spectrum = fft(dump_wav[:, st:ed]*multi_window, n=fftl, axis=1)[:, 0:np.int(fftl / 2) + 1] # channel * number_of_bin        
         spectrums[:, ii, :] = multi_signal_spectrum
         st = st + shift
         ed = ed + shift
