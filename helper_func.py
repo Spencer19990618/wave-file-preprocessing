@@ -1,5 +1,8 @@
 import os
 import wave
+import librosa
+from librosa import util
+from scipy.io import wavfile
 
 # Usage: pcm2wav(pcm_path, out_path, channel, sample_rate)
 def pcm2wav(pcm_path, out_path, channel, sample_rate):
@@ -11,6 +14,10 @@ def pcm2wav(pcm_path, out_path, channel, sample_rate):
         wav_file.writeframes(pcm_data)
         wav_file.close()
 
+def ch4_norm(wav_path, save_path):
+    y, sr = librosa.load(wav_path,mono=False)
+    y = util.normalize(y.T)
+    wavfile.write(save_path, sr, y)
 # if __name__ == '__main__':
 #     dir = r"C:\Users\Administrator\Desktop\test"
 #     out_dir = dir + r"\outwav"
